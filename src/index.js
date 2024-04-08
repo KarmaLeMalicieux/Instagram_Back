@@ -3,6 +3,7 @@ import volleyball from "volleyball";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import authRouter from "./routes/userRoutes";
 
 dotenv.config()
 

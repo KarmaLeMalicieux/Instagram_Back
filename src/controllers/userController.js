@@ -1,4 +1,5 @@
-import { generateAuthToken } from "../middlewares/auth";
+
+import { generateAuthToken } from "../middleware/auth";
 import User from "../models/userModel";
 
 const registerUser = async (req, res) => {
@@ -45,7 +46,7 @@ const loginUser = async (req, res) => {
       email : user.email,
       name : user.name,
     });
-    
+
     console.log("User as been connected", user , token)
     res.json({ message: "Vous êtes connecté", token });
   } catch (error) {
