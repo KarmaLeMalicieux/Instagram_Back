@@ -9,13 +9,13 @@ const registerUser = async (req, res) => {
     newUser.password = await newUser.crypto(req.body.password);
     newUser.name = req.body.name;
     newUser.image = req.body.image;
+    console.log(newUser);
     newUser.save();
 
     const token = generateAuthToken({
       // Nous ne mettrons pas le password pour des raisons de sécurité
       email : newUser.email,
       name : newUser.name,
-      image : newUser.image,
     });
 
     console.log("New user saved", newUser)

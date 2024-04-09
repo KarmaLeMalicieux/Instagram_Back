@@ -4,7 +4,7 @@ const userSchema = new Schema({
   name: { type: String, required: true},
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true, min: [6, "Must be at least 6 characters"] },
-  image: { type: String, required: true},
+  image: { type: String },
 });
 
 userSchema.methods.crypto = async (password) => {

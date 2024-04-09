@@ -3,7 +3,9 @@ import volleyball from "volleyball";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import authRouter from "./routes/userRoutes";
+import userRouter from "./routes/userRoutes";
+import postRouter from "./routes/postRoutes";
+import { auth } from "./middleware/auth";
 
 dotenv.config()
 
@@ -19,11 +21,15 @@ async function main() {
 
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 app.use(volleyball)
 app.use(cors());
 
-app.get("/", (req, res) => res.send(" Salut !! Ici c'est Paris !"));
-app.use("/auth", authRouter);
+app.get("/", (req, res) => res.send(" Hello World from the earth "));
+
+app.use("/auth", userRouter);
+app.use("/post", auth , postRouter)
 
 app.listen(port, () =>
   console.log(`[SERVER] is running on http://localhost:${port}`)
