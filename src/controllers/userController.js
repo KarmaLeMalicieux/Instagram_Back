@@ -28,17 +28,20 @@ const registerUser = async (req, res) => {
 
 
 const loginUser = async (req, res) => {
-
+  
   const { email, password } = req.body;
+
   try {
-    const user = await User.findOne({ email }).select("+password");
-    const verify = await user.verifPass(password, user.password);
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const verify = await user.verifPass(password);
 
     if (!verify) {
-      const error = new Error("Invalid Password");
-      console.log(error)
-      res.json({message: "Invalid Password", error })
-      throw error 
+      throw new Error("Invalid Password");
     }
 
     const token = generateAuthToken({
@@ -47,10 +50,11 @@ const loginUser = async (req, res) => {
       name : user.name,
     });
 
-    console.log("User as been connected", user , token)
+    console.log("User has been connected", user , token)
     res.json({ message: "Vous êtes connecté", token });
   } catch (error) {
     console.error(error);
+    res.status(401).json({ message: error.message });
   }
 };
 
