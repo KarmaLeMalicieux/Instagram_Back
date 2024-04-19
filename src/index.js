@@ -29,7 +29,7 @@ app.use(cors());
 app.get("/", (req, res) => res.send(" Hello World from the earth "));
 
 app.use("/auth", userRouter);
-app.use("/post", auth , postRouter)
+app.use("/post", postRouter)
 
 app.listen(port, () =>
   console.log(`[SERVER] is running on http://localhost:${port}`)

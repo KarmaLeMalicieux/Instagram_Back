@@ -16,6 +16,7 @@ const registerUser = async (req, res) => {
       // Nous ne mettrons pas le password pour des raisons de sécurité
       email : newUser.email,
       name : newUser.name,
+      image : newUser.image
     });
 
     console.log("New user saved", newUser)
@@ -48,6 +49,7 @@ const loginUser = async (req, res) => {
       id : user._id,
       email : user.email,
       name : user.name,
+      image : user.image
     });
 
     console.log("User has been connected", user , token)
@@ -58,4 +60,39 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser };
+
+const updateUser = async (req, res) => {
+  try {
+    
+    const changeUser = await User.findOne({ email: req.body.email });
+    changeUser.image = req.body.image;
+    console.log(changeUser)
+    changeUser.save()
+
+
+    if (!changeUser) {
+      throw new Error("User not found");
+    }
+
+    const token = generateAuthToken({
+      email : changeUser.email,
+      name : changeUser.name,
+      image : changeUser.image
+    });
+    console.log(changeUser, 'message: "Successfully update user with a new token ->"',token)
+    res.json({ changeUser, message: "Successfully update user with a new token ->",token });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+const getUser = async (req, res) => {
+  try {
+    const currentUser = await User.findOne({name: req.params.id});
+    res.json(currentUser);
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+};
+
+export { registerUser, loginUser, updateUser, getUser };

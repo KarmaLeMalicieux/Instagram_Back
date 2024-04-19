@@ -1,10 +1,11 @@
 import { mongoose, Schema } from "mongoose";
 import bcrypt from "bcryptjs";
 const userSchema = new Schema({
-  name: { type: String, required: true},
+  name: { type: String,unique:true, required: true},
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true, min: [6, "Must be at least 6 characters"] },
   image: { type: String },
+  posts: {type: mongoose.Schema.Types.ObjectId, ref:"Post" }
 });
 
 userSchema.methods.crypto = async (password) => {

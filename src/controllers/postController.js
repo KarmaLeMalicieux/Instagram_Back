@@ -1,4 +1,5 @@
 import Post from "../models/postModel";
+import User from "../models/userModel";
 
 
 const getAllPosts = async (req, res) => {
@@ -10,15 +11,25 @@ const getAllPosts = async (req, res) => {
   }
 };
 
-
 const createPost = async (req, res) => {
-  const { description, image } = req.body;
+  const { description, image, user } = req.body;
+
   try {
-    const newPost = await Post.create({ description,image });
-    console.log(newPost);
+    // Créer un nouveau post
+    const newPost = new Post({ description, image, user });
+    await newPost.save();
+    
+
+    // Rechercher l'utilisateur en fonction de son nom
+    const existingUser = await User.findOne({ name: user });
+
+    // Mettre à jour l'utilisateur pour inclure le nouveau post
+    await User.findByIdAndUpdate(existingUser._id, { $push: { posts: newPost._id } });
+
     res.json({ newPost, message: "Successfully created" });
+    
   } catch (error) {
-    res.json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
